@@ -10,82 +10,16 @@ def randomColor():
     return [random.uniform(-1, 1) for i in range(3)]
 
 
-POINTS = 10
+# Генерация m фигур каждая из n точек
+def generateFigures(n, m):
+    return list(list(randomPoint() for i in range(n)) for i in range(m))
 
 
-def drawPoints():
-    gl.glBegin(gl.GL_POINTS)
-    for i in range(POINTS):
-        gl.glColor3dv(randomColor())
-        gl.glVertex2dv(randomPoint())
-    gl.glEnd()
-
-
-LINES = 5
-
-
-def drawLines(type=gl.GL_LINES):
+# Рисование фигур со случайным цветом
+def drawFigures(figures, type):
     gl.glBegin(type)
-    for i in range(LINES):
+    for points in figures:
         gl.glColor3dv(randomColor())
-        gl.glVertex2dv(randomPoint())
-        gl.glVertex2dv(randomPoint())
-    gl.glEnd()
-
-
-def drawLinesStrip():
-    drawLines(gl.GL_LINE_STRIP)
-
-
-def drawLinesLoop():
-    drawLines(gl.GL_LINE_LOOP)
-
-
-TRIANGLES = 5
-
-
-def drawTriangles(type=gl.GL_TRIANGLES):
-    gl.glBegin(type)
-    for i in range(TRIANGLES):
-        gl.glColor3dv(randomColor())
-        gl.glVertex2dv(randomPoint())
-        gl.glVertex2dv(randomPoint())
-        gl.glVertex2dv(randomPoint())
-    gl.glEnd()
-
-
-def drawTrianglesStrip():
-    drawTriangles(gl.GL_TRIANGLE_STRIP)
-
-
-def drawTrianglesFan():
-    drawTriangles(gl.GL_TRIANGLE_FAN)
-
-
-QUADS = 4
-
-
-def drawQuads(type=gl.GL_QUADS):
-    gl.glBegin(type)
-    for i in range(QUADS):
-        gl.glColor3dv(randomColor())
-        gl.glVertex2dv(randomPoint())
-        gl.glVertex2dv(randomPoint())
-        gl.glVertex2dv(randomPoint())
-        gl.glVertex2dv(randomPoint())
-    gl.glEnd()
-
-
-def drawQuadsStrip():
-    drawQuads(gl.GL_QUAD_STRIP)
-
-
-POLYGON_VERTICES = 8
-
-
-def drawPolygon():
-    gl.glBegin(gl.GL_POLYGON)
-    for i in range(POLYGON_VERTICES):
-        gl.glColor3dv(randomColor())
-        gl.glVertex2dv(randomPoint())
+        for p in points:
+            gl.glVertex2dv(p)
     gl.glEnd()
