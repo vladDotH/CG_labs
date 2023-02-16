@@ -18,12 +18,6 @@ class GLWidget(QOpenGLWidget):
 
     # Функция вызываемая при обновлении (посредством update или при изменении размеров)
     def paintGL(self):
-        # Размытие цвета между вершинами
-        gl.glShadeModel(gl.GL_SMOOTH)
-        # Ширина линии
-        gl.glLineWidth(10.0)
-        # Размер точек
-        gl.glPointSize(10)
         # Вызов рендер-функции
         if self.function is not None:
             self.function()
