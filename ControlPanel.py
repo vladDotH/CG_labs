@@ -1,10 +1,10 @@
-from PyQt6 import QtCore
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QPushButton
 from OpenGL import GL as gl
 
 from PrimitiveSelector import PrimitiveSelector
 
 
+# Виджет панели управления
 class ControlPanel(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -17,4 +17,3 @@ class ControlPanel(QWidget):
         self.recreate = QPushButton("Пересоздать объект", self)
         lt.addWidget(self.primitiveSelector)
         lt.addWidget(self.recreate)
-

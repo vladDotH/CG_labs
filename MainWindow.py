@@ -1,15 +1,11 @@
-from OpenGL import GL as gl
 from PyQt6 import QtCore
-from PyQt6.QtCore import Qt
-from PyQt6.QtWidgets import QMainWindow, QHBoxLayout, QSplitter, QVBoxLayout, QSizePolicy
-
+from PyQt6.QtWidgets import QMainWindow, QSplitter
 from ControlPanel import ControlPanel
 from GLWidget import GLWidget
-from PrimitiveSelector import PrimitiveSelector
-
 from drawing import *
 
 
+# Главное окно
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -22,10 +18,11 @@ class MainWindow(QMainWindow):
         sp.setStretchFactor(0, 1)
 
         self.control.primitiveSelector.primitiveSelected.connect(self.primitiveSelected)
-        self.control.recreate.clicked.connect(self.regenerate)
+        self.control.recreate.clicked.connect(self.recreate)
         self.setCentralWidget(sp)
         self.resize(800, 600)
 
+        # Словарь рендер-функции в соответствии с константами примитивов
         self.drawers = dict([
             (gl.GL_POINT, drawPoints),
             (gl.GL_LINES, drawLines),
@@ -46,5 +43,5 @@ class MainWindow(QMainWindow):
         self.glwidget.update()
 
     @QtCore.pyqtSlot()
-    def regenerate(self):
+    def recreate(self):
         self.glwidget.update()

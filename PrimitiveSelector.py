@@ -1,9 +1,10 @@
 from PyQt6 import QtCore
-from PyQt6.QtWidgets import QWidget, QComboBox
+from PyQt6.QtWidgets import QComboBox
 from OpenGL import GL as gl
 from typing import List
 
 
+# Виджет выбора примитивов
 class PrimitiveSelector(QComboBox):
     primitiveSelected = QtCore.pyqtSignal(gl.Constant)
 
@@ -16,4 +17,3 @@ class PrimitiveSelector(QComboBox):
     @QtCore.pyqtSlot(int)
     def selected(self, i):
         self.primitiveSelected.emit(self.primitives[i])
-

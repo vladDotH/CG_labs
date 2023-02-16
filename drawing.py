@@ -1,4 +1,3 @@
-from typing import Callable
 from OpenGL import GL as gl
 import random
 
