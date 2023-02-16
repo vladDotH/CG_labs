@@ -5,23 +5,18 @@ from PyQt6.QtOpenGLWidgets import QOpenGLWidget
 class GLWidget(QOpenGLWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.color = (0, 1, 0)
+        self.function = None
 
     def initializeGL(self):
         gl.glClearColor(1, 1, 1, 1)
+        gl.glClear(gl.GL_COLOR_BUFFER_BIT | gl.GL_DEPTH_BUFFER_BIT)
 
     def paintGL(self):
-        gl.glLineWidth(50.0)
+        gl.glShadeModel(gl.GL_SMOOTH)
+        gl.glLineWidth(10.0)
         gl.glPointSize(10)
-        gl.glColor3f(*self.color)
-        gl.glBegin(gl.GL_POINTS)
-        gl.glVertex2f(0, 0)
-        gl.glVertex2f(0, 1)
-        gl.glVertex2f(1, 0)
-        gl.glVertex2f(1, 1)
-        gl.glVertex2f(0, -1)
-        gl.glVertex2f(-1, 0)
-        gl.glVertex2f(-1, -1)
-        gl.glVertex2f(-1, 1)
-        gl.glVertex2f(1, -1)
-        gl.glEnd()
+        if self.function is not None:
+            self.function()
+
+
+
