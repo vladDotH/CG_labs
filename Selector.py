@@ -7,14 +7,16 @@ from OpenGL import GL as gl
 
 # Виджет выбора констант
 class Selector(QComboBox):
-    primitiveSelected = QtCore.pyqtSignal(gl.Constant)
+    selectedSignal = QtCore.pyqtSignal(gl.Constant)
 
     def __init__(self, objects: List[gl.Constant], parent=None):
         super().__init__(parent)
         self.objects = objects
+        self.selectedObject = objects[0]
         self.addItems(list(map(lambda p: p.name, objects)))
-        self.currentIndexChanged.connect(self.selected)
+        self.currentIndexChanged.connect(self.onSelected)
 
     @QtCore.pyqtSlot(int)
-    def selected(self, i):
-        self.primitiveSelected.emit(self.objects[i])
+    def onSelected(self, i):
+        self.selectedObject = self.objects[i]
+        self.selectedSignal.emit(self.selectedObject)
