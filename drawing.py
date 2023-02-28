@@ -1,5 +1,3 @@
-from typing import Callable
-
 from OpenGL import GL as gl
 import random
 
@@ -70,7 +68,7 @@ def drawTriangles():
         ((0.9, -0.5), (-0.4, 0.4), (0.2, -0.9)),
         ((-0.4, 0.9), (0.4, 0.9), (0, -0.4)),
     ]
-    colors = [(0.9, 0.2, 0.1, 0.5), (0.2, 0.7, 0.1, 0.5), (0.1, 0.2, 0.8, 0.5)]
+    colors = [(0.9, 0.2, 0.1, 0.4), (0.2, 0.7, 0.1, 0.5), (0.1, 0.2, 0.8, 0.6)]
     for i, color in zip(triangles, colors):
         gl.glColor4dv(color)
         for p in i:
@@ -161,7 +159,7 @@ def drawPolygon():
     gl.glEnd()
 
 
-# Словарь рендер-функций
+# Словарь функций отрисовки
 renderers = dict([
     (gl.GL_POINTS, drawPoints),
     (gl.GL_LINES, drawLines),

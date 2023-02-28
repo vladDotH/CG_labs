@@ -53,9 +53,9 @@ class ControlPanel(QWidget):
         mixBox = QGroupBox("Тест смешивания", self)
         mixLt = QVBoxLayout()
         mixBox.setLayout(mixLt)
-        sFactorLabel = QLabel('Входящий фактор')
+        sFactorLabel = QLabel('Входящий фактор sfactor')
         self.sFactor = Selector([
-            gl.GL_ONE, gl.GL_ZERO,  gl.GL_DST_COLOR, gl.GL_ONE_MINUS_DST_COLOR, gl.GL_SRC_ALPHA,
+            gl.GL_ONE, gl.GL_ZERO, gl.GL_DST_COLOR, gl.GL_ONE_MINUS_DST_COLOR, gl.GL_SRC_ALPHA,
             gl.GL_ONE_MINUS_SRC_ALPHA, gl.GL_DST_ALPHA, gl.GL_ONE_MINUS_DST_ALPHA, gl.GL_SRC_ALPHA_SATURATE
         ], self)
 

@@ -33,11 +33,12 @@ class MainWindow(QMainWindow):
         for i in [c.primitiveSelector, c.transparencyFunc, c.sFactor, c.dFactor]:
             i.selectedSignal.connect(self.redraw)
 
-        # TODO fix shit:
+        #
         self.onGLResize(9999, 9999)
         c.scissorsW.setValue(c.scissorsW.maximum())
         c.scissorsH.setValue(c.scissorsH.maximum())
 
+    # Обработка изменения размеров окна
     @QtCore.pyqtSlot(int, int)
     def onGLResize(self, w, h):
         self.control.scissorsW.setMaximum(w)
