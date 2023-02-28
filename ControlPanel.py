@@ -39,8 +39,8 @@ class ControlPanel(QWidget):
         transparencyBox.setLayout(transparencyLt)
         transparencyFuncLabel = QLabel('Функция тестирования')
         self.transparencyFunc = Selector([
-            gl.GL_NEVER, gl.GL_LESS, gl.GL_EQUAL, gl.GL_LEQUAL,
-            gl.GL_GREATER, gl.GL_NOTEQUAL, gl.GL_GEQUAL, gl.GL_ALWAYS
+            gl.GL_ALWAYS, gl.GL_NEVER, gl.GL_LESS, gl.GL_EQUAL, gl.GL_LEQUAL,
+            gl.GL_GREATER, gl.GL_NOTEQUAL, gl.GL_GEQUAL
         ], self)
 
         transparencyRefLabel = QLabel('Сравниваемое значние')
@@ -55,7 +55,7 @@ class ControlPanel(QWidget):
         mixBox.setLayout(mixLt)
         sFactorLabel = QLabel('Входящий фактор')
         self.sFactor = Selector([
-            gl.GL_ZERO, gl.GL_ONE, gl.GL_DST_COLOR, gl.GL_ONE_MINUS_DST_COLOR, gl.GL_SRC_ALPHA,
+            gl.GL_ONE, gl.GL_ZERO,  gl.GL_DST_COLOR, gl.GL_ONE_MINUS_DST_COLOR, gl.GL_SRC_ALPHA,
             gl.GL_ONE_MINUS_SRC_ALPHA, gl.GL_DST_ALPHA, gl.GL_ONE_MINUS_DST_ALPHA, gl.GL_SRC_ALPHA_SATURATE
         ], self)
 
