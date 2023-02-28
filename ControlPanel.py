@@ -1,8 +1,8 @@
 from PyQt6 import QtCore
-from PyQt6.QtWidgets import QWidget, QVBoxLayout, QPushButton, QSlider, QLabel
+from PyQt6.QtWidgets import QWidget, QVBoxLayout, QSlider, QLabel, QGroupBox
 from OpenGL import GL as gl
 
-from PrimitiveSelector import PrimitiveSelector
+from Selector import Selector
 
 
 # Виджет панели управления
@@ -11,33 +11,70 @@ class ControlPanel(QWidget):
         super().__init__(parent)
         lt = QVBoxLayout(self)
         self.setLayout(lt)
-        self.primitiveSelector = PrimitiveSelector([
+
+        primitivesLabel = QLabel("Выбор Примитива", self)
+        self.primitiveSelector = Selector([
             gl.GL_POINTS, gl.GL_LINES, gl.GL_LINE_STRIP, gl.GL_LINE_LOOP, gl.GL_TRIANGLES,
             gl.GL_TRIANGLE_STRIP, gl.GL_TRIANGLE_FAN, gl.GL_QUADS, gl.GL_QUAD_STRIP, gl.GL_POLYGON
         ], self)
-        self.recreate = QPushButton("Пересоздать объект", self)
 
-        pointsLabel = QLabel('Размер точек', self)
-        self.pointsSize = QSlider(QtCore.Qt.Orientation.Horizontal, self)
-        self.pointsSize.setMinimum(1)
-        self.pointsSize.setMaximum(100)
-        self.pointsSize.setValue(10)
+        # Группа отсечения
+        scissorsBox = QGroupBox("Тест отсечения", self)
+        scissorsLt = QVBoxLayout()
+        scissorsBox.setLayout(scissorsLt)
+        sxLabel = QLabel('x', self)
+        self.scissorsX = QSlider(QtCore.Qt.Orientation.Horizontal, self)
+        syLabel = QLabel('y', self)
+        self.scissorsY = QSlider(QtCore.Qt.Orientation.Horizontal, self)
+        swLabel = QLabel('Ширина w', self)
+        self.scissorsW = QSlider(QtCore.Qt.Orientation.Horizontal, self)
+        shLabel = QLabel('Высота h', self)
+        self.scissorsH = QSlider(QtCore.Qt.Orientation.Horizontal, self)
+        for i in [sxLabel, self.scissorsX, syLabel, self.scissorsY, swLabel, self.scissorsW, shLabel, self.scissorsH]:
+            scissorsLt.addWidget(i)
 
-        linesLabel = QLabel('Размер линий', self)
-        self.lineWidth = QSlider(QtCore.Qt.Orientation.Horizontal, self)
-        self.lineWidth.setMinimum(1)
-        self.lineWidth.setMaximum(10)
-        self.lineWidth.setValue(5)
+        # Группа Прозрачности
+        transparencyBox = QGroupBox("Тест прозрачности", self)
+        transparencyLt = QVBoxLayout()
+        transparencyBox.setLayout(transparencyLt)
+        transparencyFuncLabel = QLabel('Функция тестирования')
+        self.transparencyFunc = Selector([
+            gl.GL_NEVER, gl.GL_LESS, gl.GL_EQUAL, gl.GL_LEQUAL,
+            gl.GL_GREATER, gl.GL_NOTEQUAL, gl.GL_GEQUAL, gl.GL_ALWAYS
+        ], self)
 
-        countLabel = QLabel('Количество объектов', self)
-        self.objectsCount = QSlider(QtCore.Qt.Orientation.Horizontal, self)
-        self.objectsCount.setMinimum(1)
-        self.objectsCount.setMaximum(20)
-        self.objectsCount.setValue(5)
+        transparencyRefLabel = QLabel('Сравниваемое значние')
+        self.transparencyRef = QSlider(QtCore.Qt.Orientation.Horizontal, self)
 
+        for i in [transparencyFuncLabel, self.transparencyFunc, transparencyRefLabel, self.transparencyRef]:
+            transparencyLt.addWidget(i)
+
+        # Группа Смешивания
+        mixBox = QGroupBox("Тест смешивания", self)
+        mixLt = QVBoxLayout()
+        mixBox.setLayout(mixLt)
+        sFactorLabel = QLabel('Входящий фактор')
+        self.sFactor = Selector([
+            gl.GL_ZERO, gl.GL_ONE, gl.GL_DST_COLOR, gl.GL_ONE_MINUS_DST_COLOR, gl.GL_SRC_ALPHA,
+            gl.GL_ONE_MINUS_SRC_ALPHA, gl.GL_DST_ALPHA, gl.GL_ONE_MINUS_DST_ALPHA, gl.GL_SRC_ALPHA_SATURATE
+        ], self)
+
+        dFactorLabel = QLabel('dfactor (находящиеся в буфере кадра)')
+        self.dFactor = Selector([
+            gl.GL_ZERO, gl.GL_ONE, gl.GL_SRC_COLOR, gl.GL_ONE_MINUS_SRC_COLOR, gl.GL_SRC_ALPHA,
+            gl.GL_ONE_MINUS_SRC_ALPHA, gl.GL_DST_ALPHA, gl.GL_ONE_MINUS_DST_ALPHA
+        ], self)
+
+        for i in [sFactorLabel, self.sFactor, dFactorLabel, self.dFactor]:
+            mixLt.addWidget(i)
+
+        #
         for i in [
-            self.primitiveSelector, self.recreate, pointsLabel, self.pointsSize,
-            linesLabel, self.lineWidth, countLabel, self.objectsCount
+            primitivesLabel,
+            self.primitiveSelector,
+            scissorsBox,
+            transparencyBox,
+            mixBox
         ]:
             lt.addWidget(i)
 
