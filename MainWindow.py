@@ -34,13 +34,13 @@ class MainWindow(QMainWindow):
     def renderFunction(self):
         # Размытие цвета между вершинами
         gl.glShadeModel(gl.GL_SMOOTH)
-        gl.glLineWidth(3)
+        gl.glLineWidth(5)
         gl.glPointSize(10)
         dots = generate(self.control.iterations.value(), self.control.radius.value() / self.radiusFraction)
         drawLines(dots)
-        for level in dots:
-            for p in level:
-                drawCircle(self.control.radius.value() / self.radiusFraction / 2, p)
+        for i in range(len(dots)):
+            for p in range(len(dots[i])):
+                drawCircle(self.control.radius.value() / self.radiusFraction / 2, dots[i][p], colors[(i + p) % 4])
 
     # Вызов обновления изображения
     @QtCore.pyqtSlot()
