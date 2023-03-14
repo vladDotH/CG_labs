@@ -1,17 +1,16 @@
 from OpenGL import GL as gl
 import numpy as np
 
-# Углы точек шестиугольника
-angles = np.linspace(0, 2 * np.pi, 7)[:-1] + np.pi / 6
+# Нормализованные векторы точек шестиугольника
+hexagon = np.array([
+    np.array([np.cos(t), np.sin(t)])
+    for t in np.linspace(0, 2 * np.pi, 7)[:-1] + np.pi / 6
+])
 
 
 # Генерация n уровней вложенных шестиугольников на расстоянии r
 def generate(n, r):
-    return [
-        [
-            i * r * np.array([np.cos(t), np.sin(t)]) for t in angles
-        ] for i in range(n)
-    ]
+    return [i * r * hexagon for i in range(n)]
 
 
 # Палитра цветов
