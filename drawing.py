@@ -1,9 +1,11 @@
 from OpenGL import GL as gl
 import numpy as np
 
+# Углы точек шестиугольника
 angles = np.linspace(0, 2 * np.pi, 7)[:-1] + np.pi / 6
 
 
+# Генерация n уровней вложенных шестиугольников на расстоянии r
 def generate(n, r):
     return [
         [
@@ -12,6 +14,7 @@ def generate(n, r):
     ]
 
 
+# Палитра цветов
 colors = [
     [0.06, 0.28, 0.66],
     [0.78, 0.0, 0.49],
@@ -19,10 +22,11 @@ colors = [
     [1.0, 0.65, 0.0]
 ]
 
-circleAngles = np.linspace(0, 2 * np.pi, 50)
-circleVecs = [np.array([np.cos(t), np.sin(t)]) for t in circleAngles]
+# Векторы точек окружности
+circleVecs = [np.array([np.cos(t), np.sin(t)]) for t in np.linspace(0, 2 * np.pi, 50)]
 
 
+# Рисование окружности радиуса r в точке p
 def drawCircle(r, p, color):
     gl.glBegin(gl.GL_LINE_STRIP)
     gl.glColor3dv(color)
@@ -31,6 +35,7 @@ def drawCircle(r, p, color):
     gl.glEnd()
 
 
+# Рисованиее линий списка уровней шестиугольников
 def drawLines(dots):
     gl.glBegin(gl.GL_LINES)
     # Уровни

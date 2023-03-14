@@ -12,9 +12,7 @@ class ControlPanel(QWidget):
         self.iterations = QSlider(Qt.Orientation.Horizontal, self)
         radiusLabel = QLabel('Расстояние между уровнями (масштаб)', self)
         self.radius = QSlider(Qt.Orientation.Horizontal, self)
-
         #
         for i in [levelsLabel, self.iterations, radiusLabel, self.radius]:
             lt.addWidget(i)
-
         lt.addStretch()

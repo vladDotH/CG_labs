@@ -32,15 +32,19 @@ class MainWindow(QMainWindow):
         self.control.iterations.valueChanged.connect(self.redraw)
 
     def renderFunction(self):
+        radius = self.control.radius.value() / self.radiusFraction
         # Размытие цвета между вершинами
         gl.glShadeModel(gl.GL_SMOOTH)
-        gl.glLineWidth(5)
-        gl.glPointSize(10)
-        dots = generate(self.control.iterations.value(), self.control.radius.value() / self.radiusFraction)
+        # Ширина линий
+        gl.glLineWidth(1 + 15 * radius)
+        # Генерация шестиугольников
+        dots = generate(self.control.iterations.value(), radius)
+        # Рисование их линий
         drawLines(dots)
+        # Рисование окружностей в вершинах шестиугольников
         for i in range(len(dots)):
             for p in range(len(dots[i])):
-                drawCircle(self.control.radius.value() / self.radiusFraction / 2, dots[i][p], colors[(i + p) % 4])
+                drawCircle(radius / 2, dots[i][p], colors[(i + p) % 4])
 
     # Вызов обновления изображения
     @QtCore.pyqtSlot()
