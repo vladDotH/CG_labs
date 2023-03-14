@@ -26,7 +26,7 @@ class MainWindow(QMainWindow):
         self.radiusFraction = 1000
 
         self.control.radius.setMaximum(self.radiusFraction)
-        self.control.iterations.setMaximum(100)
+        self.control.iterations.setMaximum(50)
         self.control.iterations.setTickInterval(1)
         self.control.radius.valueChanged.connect(self.redraw)
         self.control.iterations.valueChanged.connect(self.redraw)
