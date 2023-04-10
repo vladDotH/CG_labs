@@ -19,7 +19,7 @@ class GLWidget(QOpenGLWidget):
     # Функция вызываемая перед любым обновлением
     def initializeGL(self):
         # Заливка кадра
-        gl.glClearColor(0.1, 0.1, 0.1, 1)
+        gl.glClearColor(1, 1, 1, 1)
         # Очистка буферов (цвета и глубины)
         gl.glClear(gl.GL_COLOR_BUFFER_BIT | gl.GL_DEPTH_BUFFER_BIT)
 
