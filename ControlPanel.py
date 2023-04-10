@@ -1,18 +1,32 @@
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QSlider, QLabel
+from PyQt6 import QtCore
 
 
 # Виджет панели управления
 class ControlPanel(QWidget):
-    def __init__(self, parent=None):
+    weightsChanged = QtCore.pyqtSignal()
+
+    def __init__(self, weights, parent=None):
         super().__init__(parent)
         lt = QVBoxLayout(self)
         self.setLayout(lt)
-        levelsLabel = QLabel('Количество итераций', self)
-        self.iterations = QSlider(Qt.Orientation.Horizontal, self)
-        radiusLabel = QLabel('Расстояние между уровнями (масштаб)', self)
-        self.radius = QSlider(Qt.Orientation.Horizontal, self)
-        #
-        for i in [levelsLabel, self.iterations, radiusLabel, self.radius]:
-            lt.addWidget(i)
+
+        knotsLabel = QLabel('Количество узлов NURBS сплайна', self)
+        self.knots = QSlider(Qt.Orientation.Horizontal)
+
+        weightsLabel = QLabel('Веса NURBS сплайна', self)
+        wLabels = [QLabel(f'W{i}') for i in range(weights)]
+        self.wSliders = [QSlider(Qt.Orientation.Horizontal) for i in range(weights)]
+
+        for w in [knotsLabel, self.knots, weightsLabel]:
+            lt.addWidget(w)
+
+        for i in range(weights):
+            lt.addWidget(wLabels[i])
+            lt.addWidget(self.wSliders[i])
+            self.wSliders[i].valueChanged.connect(lambda: self.weightsChanged.emit())
+            self.wSliders[i].setMaximum(100)
+            self.wSliders[i].setMinimum(1)
+
         lt.addStretch()
