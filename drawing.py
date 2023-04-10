@@ -1,54 +1,48 @@
-from OpenGL import GL as gl
+from functools import cache
 import numpy as np
 
-# Нормализованные векторы точек шестиугольника
-hexagon = np.array([
-    np.array([np.cos(t), np.sin(t)])
-    for t in np.linspace(0, 2 * np.pi, 7)[:-1] + np.pi / 6
-])
 
+def buildNurbs(T: list[float], P: list[np.ndarray], W: list[float]):
+    if len(W) != len(P):
+        raise ValueError()
 
-# Генерация n уровней вложенных шестиугольников на расстоянии r
-def generate(n, r):
-    return [i * r * hexagon for i in range(n)]
+    # Узлы
+    m = len(T) - 1
+    # Управляющие точки
+    n = len(P) - 1
+    # Степень сплайна
+    p = m - n - 1
 
+    # Базисные функции N_(k, m)
+    N = dict()
 
-# Палитра цветов
-colors = [
-    [0.06, 0.28, 0.66],
-    [0.78, 0.0, 0.49],
-    [0.66, 0.94, 0.0],
-    [1.0, 0.65, 0.0]
-]
+    # Генерация базисных функций порядка 0
+    def buildNk1(ti, ti1):
+        return lambda t: 1 if (ti <= t <= ti1) else 0
 
-# Векторы точек окружности
-circleVecs = [np.array([np.cos(t), np.sin(t)]) for t in np.linspace(0, 2 * np.pi, 50)]
+    for i in range(m):
+        N[(i, 0)] = buildNk1(T[i], T[i + 1])
 
+    # Генерация базисных функций k-го порядка
+    def buildNkm(i, n):
+        nonlocal N, T
 
-# Рисование окружности радиуса r в точке p
-def drawCircle(r, p, color):
-    gl.glBegin(gl.GL_LINE_STRIP)
-    gl.glColor3dv(color)
-    for a in circleVecs:
-        gl.glVertex2dv(p + a * r)
-    gl.glEnd()
+        @cache
+        def Nin(t):
+            f = (t - T[i]) / (T[i + n] - T[i]) if (T[i + n] - T[i]) != 0 else 0
+            g = (T[i + n] - t) / (T[i + n] - T[i]) if (T[i + n] - T[i]) != 0 else 0
+            return f * N[(i, n - 1)](t) + (1 + g) * N[(i + 1, n - 1)](t)
 
+        return Nin
 
-# Рисованиее линий списка уровней шестиугольников
-def drawLines(dots):
-    gl.glBegin(gl.GL_LINES)
-    # Уровни
-    for i in range(1, len(dots)):
-        # Точки в уровне
-        for j in range(6):
-            gl.glColor3dv(colors[j % 4])
-            # Соединение точки с двумя другими на своём уровне
-            for k in range(1, 3):
-                gl.glVertex2dv(dots[i][j])
-                gl.glVertex2dv(dots[i][j - 2 * k])
-            # Соединение точки с двумя точками предыдущего уровня
-            gl.glVertex2dv(dots[i][j])
-            gl.glVertex2dv(dots[i - 1][j - 1])
-            gl.glVertex2dv(dots[i][j])
-            gl.glVertex2dv(dots[i - 1][(j + 1) % 6])
-    gl.glEnd()
+    for j in range(1, p + 1):
+        for i in range(n - j + p + 1):
+            N[(i, j)] = buildNkm(i, j)
+
+    def F(t):
+        f = [N[(i, p)](t) * W[i] for i in range(n + 1)]
+        c1 = sum([f[i] * P[i] for i in range(n + 1)])
+        c2 = sum([f[i] for i in range(n + 1)])
+        return c1 / c2 if c2 != 0 else c1
+
+    return F, N
