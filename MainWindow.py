@@ -1,5 +1,3 @@
-import math
-
 from PyQt6 import QtCore
 from PyQt6.QtWidgets import QMainWindow, QSplitter
 from ControlPanel import ControlPanel
@@ -30,43 +28,36 @@ class MainWindow(QMainWindow):
             np.array([0.9, -0.9]),
             np.array([0.9, 0]),
         ]
-        # Узловой вектор
-        self.T = None
-        # Веса контрольных точек
-        self.W = None
 
         # Виджет управления
         self.control = ControlPanel(len(self.P), self)
-
-        # Настраиваем ползунок количества узлов
-        self.control.knots.setMinimum(10)
-        self.control.knots.setMaximum(25)
-        self.control.knots.setValue(15)
 
         # Задаём начальные веса
         for i in range(9):
             if i % 2 == 0:
                 self.control.wSliders[i].setValue(60)
             else:
-                self.control.wSliders[i].setValue(int(60 / math.sqrt(2)))
+                self.control.wSliders[i].setValue(int(60 / (2 ** (1 / 2))))
 
-        self.onKnotsChanged()
+        # Задаём узловой вектор
+        self.T = np.array([
+            0, 0, 0,
+            np.pi / 2, np.pi / 2,
+            np.pi, np.pi,
+            3 * np.pi / 2, 3 * np.pi / 2,
+            np.pi * 2, np.pi * 2, np.pi * 2
+        ]) / (2 * np.pi)
+
         self.onWeightsChanged()
-
         self.control.weightsChanged.connect(self.onWeightsChanged)
-        self.control.knots.valueChanged.connect(self.onKnotsChanged)
 
         sp = QSplitter(self)
         sp.addWidget(self.glwidget)
         sp.addWidget(self.control)
         sp.setStretchFactor(0, 1)
         self.setCentralWidget(sp)
-        self.resize(900, 600)
+        self.resize(800, 600)
         self.setWindowTitle("0303 Болкунов В. О. Лабораторная работа №4")
-
-    def onKnotsChanged(self):
-        self.T = np.linspace(0, 1, self.control.knots.value())
-        self.rebuildSpline()
 
     def onWeightsChanged(self):
         self.W = [s.value() for s in self.control.wSliders]
@@ -74,13 +65,8 @@ class MainWindow(QMainWindow):
 
     # Сборка сплайна
     def rebuildSpline(self):
-        if self.W is None:
-            self.onWeightsChanged()
-        if self.T is None:
-            self.onKnotsChanged()
-
         self.F, N = buildNurbs(self.T, self.P, self.W)
-        X = np.linspace(0, 1, 100)[1:-1]
+        X = np.linspace(0, 1, 100)
         self.Points = [self.F(x) for x in X]
         self.redraw()
 

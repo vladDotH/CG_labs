@@ -12,14 +12,11 @@ class ControlPanel(QWidget):
         lt = QVBoxLayout(self)
         self.setLayout(lt)
 
-        knotsLabel = QLabel('Количество узлов NURBS сплайна', self)
-        self.knots = QSlider(Qt.Orientation.Horizontal)
-
         weightsLabel = QLabel('Веса NURBS сплайна', self)
         wLabels = [QLabel(f'W{i}') for i in range(weights)]
         self.wSliders = [QSlider(Qt.Orientation.Horizontal) for i in range(weights)]
 
-        for w in [knotsLabel, self.knots, weightsLabel]:
+        for w in [weightsLabel]:
             lt.addWidget(w)
 
         for i in range(weights):
