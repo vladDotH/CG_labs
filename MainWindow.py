@@ -1,3 +1,5 @@
+import math
+
 from PyQt6 import QtCore
 from PyQt6.QtWidgets import QMainWindow, QSplitter
 from ControlPanel import ControlPanel
@@ -43,7 +45,10 @@ class MainWindow(QMainWindow):
 
         # Задаём начальные веса
         for i in range(9):
-            self.control.wSliders[i].setValue(50)
+            if i % 2 == 0:
+                self.control.wSliders[i].setValue(60)
+            else:
+                self.control.wSliders[i].setValue(int(60 / math.sqrt(2)))
 
         self.onKnotsChanged()
         self.onWeightsChanged()
