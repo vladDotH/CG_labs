@@ -24,14 +24,14 @@ def buildNurbs(T: list[float], P: list[np.ndarray], W: list[float]):
         N[(i, 0)] = buildNk1(T[i], T[i + 1])
 
     # Генерация базисных функций k-го порядка
-    def buildNkm(i, n):
+    def buildNkm(i, j):
         nonlocal N, T
 
         @cache
         def Nin(t):
-            f = (t - T[i]) / (T[i + n] - T[i]) if (T[i + n] - T[i]) != 0 else 0
-            g = (T[i + n] - t) / (T[i + n] - T[i]) if (T[i + n] - T[i]) != 0 else 0
-            return f * N[(i, n - 1)](t) + (1 + g) * N[(i + 1, n - 1)](t)
+            f = (t - T[i]) / (T[i + j] - T[i]) #if (T[i + n] - T[i]) != 0 else 0
+            g = (T[i + 1 + j] - t) / (T[i + 1 + j] - T[i + 1]) #if (T[i + 1 + n] - T[i + 1]) != 0 else 0
+            return f * N[(i, j - 1)](t) + (g) * N[(i + 1, j - 1)](t)
 
         return Nin
 
