@@ -16,6 +16,15 @@ class MainWindow(QMainWindow):
         # Задаём рендер-функцию
         self.glwidget.function = self.renderFunction
 
+        # Задаём узловой вектор
+        self.T = np.array([
+            0, 0, 0,
+            np.pi / 2, np.pi / 2,
+            np.pi, np.pi,
+            3 * np.pi / 2, 3 * np.pi / 2,
+            np.pi * 2, np.pi * 2, np.pi * 2
+        ]) / (2 * np.pi)
+
         # Точки окружности
         self.P = P = [
             np.array([0.9, 0]),
@@ -38,15 +47,6 @@ class MainWindow(QMainWindow):
                 self.control.wSliders[i].setValue(60)
             else:
                 self.control.wSliders[i].setValue(int(60 / (2 ** (1 / 2))))
-
-        # Задаём узловой вектор
-        self.T = np.array([
-            0, 0, 0,
-            np.pi / 2, np.pi / 2,
-            np.pi, np.pi,
-            3 * np.pi / 2, 3 * np.pi / 2,
-            np.pi * 2, np.pi * 2, np.pi * 2
-        ]) / (2 * np.pi)
 
         self.onWeightsChanged()
         self.control.weightsChanged.connect(self.onWeightsChanged)
