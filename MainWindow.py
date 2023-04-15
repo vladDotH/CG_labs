@@ -9,7 +9,7 @@ from drawing import *
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("0303 Болкунов В. О. Лабораторная работа № 3")
+        self.setWindowTitle("0303 Болкунов В. О. Лабораторная работа № 5")
         self.control = ControlPanel(self)
         self.glwidget = GLWidget(self)
         sp = QSplitter(self)
@@ -24,14 +24,31 @@ class MainWindow(QMainWindow):
         self.glwidget.function = self.renderFunction
 
         self.radiusFraction = 1000
+        self.lengthFraction = 100
+        self.amplitudeFraction = 1000
 
         self.control.radius.setMaximum(self.radiusFraction)
         self.control.iterations.setMaximum(50)
         self.control.iterations.setTickInterval(1)
+        self.control.amplitude.setMaximum(1000)
+        self.control.waves.setMaximum(10000)
+
         self.control.radius.valueChanged.connect(self.redraw)
         self.control.iterations.valueChanged.connect(self.redraw)
+        self.control.waves.valueChanged.connect(self.redraw)
+        self.control.amplitude.valueChanged.connect(self.redraw)
+
+        self.control.waves.setValue(500)
+        self.control.amplitude.setValue(50)
+
+        self.control.radius.setValue(200)
+        self.control.iterations.setValue(5)
+        self.redraw()
 
     def renderFunction(self):
+        self.glwidget.setLength(self.control.waves.value() / self.lengthFraction)
+        self.glwidget.setAmplitude(self.control.amplitude.value() / self.amplitudeFraction)
+
         radius = self.control.radius.value() / self.radiusFraction
         # Размытие цвета между вершинами
         gl.glShadeModel(gl.GL_SMOOTH)
