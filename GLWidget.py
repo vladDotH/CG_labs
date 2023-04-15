@@ -33,9 +33,6 @@ class GLWidget(QOpenGLWidget):
         self.lengthLocation = gl.glGetUniformLocation(self.shader, "length")
         self.amplitudeLocation = gl.glGetUniformLocation(self.shader, "amplitude")
 
-        self.setLength(5.0)
-        self.setAmplitude(0.05)
-
     # Функция вызываемая при обновлении (посредством update или при изменении размеров)
     def paintGL(self):
         # Вызов рендер-функции
