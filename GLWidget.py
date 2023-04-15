@@ -2,6 +2,8 @@ from OpenGL import GL as gl
 from PyQt6 import QtCore
 from PyQt6.QtOpenGLWidgets import QOpenGLWidget
 
+import shaders
+
 
 # Виджет OpenGL
 class GLWidget(QOpenGLWidget):
@@ -11,6 +13,7 @@ class GLWidget(QOpenGLWidget):
         super().__init__(parent)
         # Функция вызываемая в цикле отрисовки (при обновлениях)
         self.function = None
+        self.shader = None
 
     def resizeGL(self, w: int, h: int) -> None:
         gl.glViewport(0, 0, w, h)
@@ -22,9 +25,29 @@ class GLWidget(QOpenGLWidget):
         gl.glClearColor(0.1, 0.1, 0.1, 1)
         # Очистка буферов (цвета и глубины)
         gl.glClear(gl.GL_COLOR_BUFFER_BIT | gl.GL_DEPTH_BUFFER_BIT)
+        # Создание программы шейдера
+        self.shader = shaders.createWaveProgram()
+        # Подключение шейдера
+        gl.glUseProgram(self.shader)
+        # Указатели для uniform параметров
+        self.lengthLocation = gl.glGetUniformLocation(self.shader, "length")
+        self.amplitudeLocation = gl.glGetUniformLocation(self.shader, "amplitude")
+
+        self.setLength(5.0)
+        self.setAmplitude(0.05)
 
     # Функция вызываемая при обновлении (посредством update или при изменении размеров)
     def paintGL(self):
         # Вызов рендер-функции
         if self.function is not None:
             self.function()
+
+    # Изменить длину волны в шейдере
+    def setLength(self, length: float):
+        if self.shader is not None:
+            gl.glUniform1f(self.lengthLocation, length)
+
+    # Изменить амплитуду в шейдере
+    def setAmplitude(self, amplitude: float):
+        if self.shader is not None:
+            gl.glUniform1f(self.amplitudeLocation, amplitude)
