@@ -30,7 +30,7 @@ class GLWidget(QOpenGLWidget):
         # Подключение шейдера
         gl.glUseProgram(self.shader)
         # Указатели для uniform параметров
-        self.lengthLocation = gl.glGetUniformLocation(self.shader, "length")
+        self.freqLocation = gl.glGetUniformLocation(self.shader, "freq")
         self.amplitudeLocation = gl.glGetUniformLocation(self.shader, "amplitude")
 
     # Функция вызываемая при обновлении (посредством update или при изменении размеров)
@@ -39,10 +39,10 @@ class GLWidget(QOpenGLWidget):
         if self.function is not None:
             self.function()
 
-    # Изменить длину волны в шейдере
-    def setLength(self, length: float):
+    # Изменить частоту волны в шейдере
+    def setFreq(self, freq: float):
         if self.shader is not None:
-            gl.glUniform1f(self.lengthLocation, length)
+            gl.glUniform1f(self.freqLocation, freq)
 
     # Изменить амплитуду в шейдере
     def setAmplitude(self, amplitude: float):

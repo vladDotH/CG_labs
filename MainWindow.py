@@ -30,7 +30,8 @@ class MainWindow(QMainWindow):
         self.control.radius.setMaximum(self.radiusFraction)
         self.control.iterations.setMaximum(50)
         self.control.iterations.setTickInterval(1)
-        self.control.amplitude.setMaximum(1000)
+        self.control.amplitude.setMaximum(500)
+        self.control.amplitude.setMinimum(-500)
         self.control.waves.setMaximum(10000)
 
         self.control.radius.valueChanged.connect(self.redraw)
@@ -46,7 +47,7 @@ class MainWindow(QMainWindow):
         self.redraw()
 
     def renderFunction(self):
-        self.glwidget.setLength(self.control.waves.value() / self.lengthFraction)
+        self.glwidget.setFreq(self.control.waves.value() / self.lengthFraction)
         self.glwidget.setAmplitude(self.control.amplitude.value() / self.amplitudeFraction)
 
         radius = self.control.radius.value() / self.radiusFraction
